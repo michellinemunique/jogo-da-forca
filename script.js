@@ -1,76 +1,65 @@
-var palavra = new Array();
-var controlando = 0;
-var tracos = [];
-var jogadas = 6;
-var imagensForca = [
-    'hangman-0.jpg',
-    'hangman-1.jpg',
-    'hangman-2.jpg',
-    'hangman-3.jpg',
-    'hangman-4.jpg',
-    'hangman-5.jpg',
-    'hangman-6.jpg'
-];
+// Palavras para o jogo
+const palavras = ["javascript", "html", "css", "openai", "forca"];
 
-function preencher(valor) {
-    var elemento = document.getElementById("tela");
-    var value = elemento.value;
-    if (controlando == 0) {
-        elemento.value = value + valor;
-    }
-    if (controlando == 1) {
-        preenchimento(valor);
-    }
-}
 
-function preenchimento(valor) {
-    var elemento = document.getElementById("resp");
-    var value = elemento.value;
-    var conpt = false;
+let palavraSelecionada = "";
+let palavraEscondida = [];
+let tentativas = 6;
+let letrasUsadas = [];
+let imagemAtual = 0;
+
+function iniciarJogo() {
     
-    for (var i = 0; i < palavra.length; i++) {
-        if (valor == palavra[i]) {
-            tracos[i] = valor;
-            document.getElementById(valor).disabled = true;
-            conpt = true;
+    palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)];
+
+    palavraEscondida = Array(palavraSelecionada.length).fill('_');
+
+   
+    atualizarInterface();
+}
+
+function atualizarInterface() {
+    document.getElementById('palavra').textContent = palavraEscondida.join(' ');
+    document.getElementById('tentativas').textContent = `Tentativas restantes: ${tentativas}`;
+    document.getElementById('resultado').textContent = '';
+    let letrasUsadasTexto = letrasUsadas.join(', ');
+    document.getElementById('letras-usadas').textContent = `Letras usadas: ${letrasUsadasTexto}`;
+}
+
+function atualizarImagem() {
+    document.getElementById('enforcado').src = `./hangman-${imagemAtual}.jpg`;
+}
+
+function checarLetra() {
+    let letra = document.getElementById('letra').value.toLowerCase();
+
+    if (letrasUsadas.includes(letra)) {
+        document.getElementById('resultado').textContent = 'Você já usou essa letra!';
+        return;
+    }
+
+    letrasUsadas.push(letra);
+
+    if (palavraSelecionada.includes(letra)) {
+        for (let i = 0; i < palavraSelecionada.length; i++) {
+            if (palavraSelecionada[i] === letra) {
+                palavraEscondida[i] = letra;
+            }
         }
+    } else {
+        tentativas--;
+        imagemAtual++;
+        atualizarImagem();
     }
 
-    if (!conpt) {
-        jogadas = jogadas - 1;
-        atualizarImagemForca(jogadas);
+    atualizarInterface();
 
-        if (jogadas === 0) {
-            alert("Você perdeu! Tente Novamente!");
-            location.href = "index.html";
-        }
-
-        elemento.value = tracos.join(" ");
+    if (tentativas === 0 || !palavraEscondida.includes('_')) {
+        document.getElementById('resultado').textContent = tentativas === 0 ? 'Você perdeu!' : 'Parabéns, você ganhou!';
+        document.getElementById('letra').disabled = true;
+        document.getElementById('btn-verificar').disabled = true;
     }
 }
 
-function atualizarImagemForca(tentativasRestantes) {
-    var logElement = document.getElementById("log");
-    var imagemElement = document.createElement("img");
-    imagemElement.src = imagensForca[6 - tentativasRestantes];
-    logElement.innerHTML = "";
-    logElement.appendChild(imagemElement);
-}
 
-function iniciar(tela) {
-    var copia = tela.value;
-    document.getElementById("tela").disabled = true;
-    palavra = copia.split(""); // Converter a palavra em um array de letras
-    controlando = 1;
-    criarTracos();
-}
-
-function criarTracos() {
-    var elemento = document.getElementById("resp");
-    var tam = palavra.length;
-    for (var i = 0; i < tam; i++) {
-        tracos[i] = "__";
-    }
-    elemento.value = tracos.join(" ");
-}
-
+iniciarJogo();
