@@ -3,48 +3,21 @@ body {
     text-align: center;
 }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+input {
+    margin-top: 10px;
 }
 
-h1 {
-    font-size: 24px;
+button {
+    margin-top: 10px;
 }
 
-.hangman-img {
-    width: 50%;
-    float: left;
+#resultado {
+    font-weight: bold;
+    margin-top: 10px;
 }
 
-#campo {
-    text-align: center;
-}
-
-#tela {
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-#resp {
-    font-size: 24px;
-    margin-top: 20px;
-}
-
-#teclas {
-    font-size: 20px;
-    margin-top: 20px;
-}
-
-#log {
-    text-align: center;
-    margin-top: 20px;
-}
-
-#situacao {
-    text-align: center;
-    margin-top: 20px;
+#letras-usadas {
+    margin-top: 10px;
 }
 
 
